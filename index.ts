@@ -1,4 +1,4 @@
-import type { User, Project, Box } from './types';
+import type { User, Project, Box } from './my-todo-app/src/types';
 
 const MyNewUser: User = {
     id: 1,
