@@ -1,73 +1,70 @@
-import type { User, Project, Box } from './types';
+import type { Project } from './types';
 import './style.css';
 
 
-const MyNewUser: User = {
-    id: 1,
-    name: "Taraneh",
-    isAdmin: true,
-    projects: []
-};
-
-const realProjectBox: Box<Project> = {
-    content: { title: "Mastering TS", deadline: "2026", status: "backlog" }
-};
-
+const allProjects: Project[] = [];
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
 if (app) {
     app.innerHTML = `
     <div class="card">
-      <h1>TS Dashboard</h1>
-      <p>👤 User: <strong>${MyNewUser.name} </strong></p>
+      <h1>TS Project List 📋</h1>
+      <button id="load-btn" style="background-color: #646cff; color: white; padding: 10px; cursor: pointer; border-radius: 8px; border: none;">
+          Fetch New Project 🎲
+      </button>
       
-      <div class="project-info">
-        <h3>Current Project:</h3>
-        <p><strong>Project ID:</strong> #<span id="project-id">0</span></p>
-<p id="project-title">${realProjectBox.content.title}</p>
-                <p>Status: <span id="status-tag" style="padding: 2px 8px; border-radius: 4px; color: white; background-color: #646cff;">
-            ${realProjectBox.content.status}
-        </span></p>
-        
-        <div style="margin-top: 20px;">
-            <button id="load-btn" style="background-color: #646cff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-                Load Random Project 🎲
-            </button>
-        </div>
-      </div>
+      <div id="projects-container"></div>
     </div>
     `;
 
-    
     const loadBtn = document.querySelector('#load-btn');
     loadBtn?.addEventListener('click', fetchRemoteProject);
 }
 
-
 async function fetchRemoteProject() {
     try {
-        const titleElement = document.querySelector('#project-title');
-        const idElement = document.querySelector('#project-id'); 
-        const statusTag = document.querySelector('#status-tag') as HTMLElement;
-
-        if (titleElement) titleElement.textContent = "Loading...";
-
         const randomId = Math.floor(Math.random() * 200) + 1;
         const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${randomId}`);
         const data = await response.json();
 
-        if (titleElement && idElement && statusTag) {
-            
-            idElement.textContent = data.id.toString(); 
-            titleElement.textContent = data.title;
-            
-            
-            const newStatus = data.completed ? "done" : "in-progress";
-            statusTag.textContent = newStatus;
-            statusTag.style.backgroundColor = newStatus === "done" ? "#4CAF50" : "#FFA500";
-        }
+        const newProject: Project = {
+            title: data.title,
+            deadline: "2026",
+            status: data.completed ? "done" : "in-progress"
+        };
+
+        allProjects.unshift(newProject);
+
+        renderProjectsList();
+
     } catch (error) {
         console.error("Error:", error);
     }
 }
+
+
+function renderProjectsList() {
+    const container = document.querySelector('#projects-container');
+    if (!container) return;
+
+ 
+    container.innerHTML = "";
+
+   
+    allProjects.forEach((proj, index) => {
+        const projectCard = document.createElement('div');
+        projectCard.style.borderBottom = "1px solid #eee";
+        projectCard.style.padding = "10px 0";
+        
+        projectCard.innerHTML = `
+            <p><strong>#${allProjects.length - index}</strong>: ${proj.title}</p>
+            <small style="color: ${proj.status === 'done' ? 'green' : 'orange'}">
+                Status: ${proj.status}
+            </small>
+        `;
+        
+        container.appendChild(projectCard);
+    });
+}
+ 
