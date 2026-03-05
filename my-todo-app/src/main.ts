@@ -1,7 +1,7 @@
 import type { User, Project, Box } from './types';
 import './style.css';
 
-// ۱. تعریف داده‌های اولیه
+
 const MyNewUser: User = {
     id: 1,
     name: "Taraneh",
@@ -13,7 +13,7 @@ const realProjectBox: Box<Project> = {
     content: { title: "Mastering TS", deadline: "2026", status: "backlog" }
 };
 
-// ۳. مدیریت بخش نمایش (UI)
+
 const app = document.querySelector<HTMLDivElement>('#app');
 
 if (app) {
@@ -38,12 +38,12 @@ if (app) {
     </div>
     `;
 
-    // ۴. گوش به زنگ بودن برای کلیک دکمه
+    
     const loadBtn = document.querySelector('#load-btn');
     loadBtn?.addEventListener('click', fetchRemoteProject);
 }
 
-// ۵. غول مرحله آخر: تابع گرفتن دیتا از اینترنت
+
 async function fetchRemoteProject() {
     try {
         const titleElement = document.querySelector('#project-title');
@@ -51,25 +51,25 @@ async function fetchRemoteProject() {
 
         if (titleElement) titleElement.textContent = "Loading...";
 
-        // تولید ID تصادفی برای تنوع در پروژه‌ها
+        
         const randomId = Math.floor(Math.random() * 200) + 1;
         
-        // درخواست به سرور با استفاده از Backticks
+       
         const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${randomId}`);
         
         if (!response.ok) throw new Error("Network error!");
         
         const data = await response.json();
 
-        // آپدیت کردن DOM با اطلاعات جدید
+       
         if (titleElement && statusTag) {
             titleElement.textContent = data.title;
             
-            // تبدیل دیتای بولین سرور به وضعیت‌های پروژه ما
+       
             const newStatus = data.completed ? "done" : "in-progress";
             statusTag.textContent = newStatus;
             
-            // تغییر رنگ هوشمند
+            
             statusTag.style.backgroundColor = newStatus === "done" ? "#4CAF50" : "#FFA500";
         }
 
