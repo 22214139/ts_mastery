@@ -13,10 +13,6 @@ const realProjectBox: Box<Project> = {
     content: { title: "Mastering TS", deadline: "2026", status: "backlog" }
 };
 
-// ۲. تابع کمکی برای آپدیت وضعیت (منطق خالص)
-//function updateProjectStatus(project: Project, newStatus: "backlog" | "in-progress" | "done"): Project {
-   // return { ...project, status: newStatus };}
-
 // ۳. مدیریت بخش نمایش (UI)
 const app = document.querySelector<HTMLDivElement>('#app');
 
