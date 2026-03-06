@@ -48,23 +48,43 @@ function renderProjectsList() {
     const container = document.querySelector('#projects-container');
     if (!container) return;
 
- 
     container.innerHTML = "";
 
-   
     allProjects.forEach((proj, index) => {
         const projectCard = document.createElement('div');
+        projectCard.className = "project-card";
         projectCard.style.borderBottom = "1px solid #eee";
-        projectCard.style.padding = "10px 0";
+        projectCard.style.padding = "10px";
+        projectCard.style.display = "flex";
+        projectCard.style.justifyContent = "space-between";
+        projectCard.style.alignItems = "center";
         
         projectCard.innerHTML = `
-            <p><strong>#${allProjects.length - index}</strong>: ${proj.title}</p>
-            <small style="color: ${proj.status === 'done' ? 'green' : 'orange'}">
-                Status: ${proj.status}
-            </small>
+            <div>
+                <p><strong>#${allProjects.length - index}</strong>: ${proj.title}</p>
+                <small style="color: ${proj.status === 'done' ? 'green' : 'orange'}">
+                    Status: ${proj.status}
+                </small>
+            </div>
+            <button class="delete-btn" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                Delete 🗑️
+            </button>
         `;
+        
+       
+        const deleteBtn = projectCard.querySelector('.delete-btn');
+        
+        
+        deleteBtn?.addEventListener('click', () => {
+           
+            allProjects.splice(index, 1);
+            
+           
+            renderProjectsList();
+        });
         
         container.appendChild(projectCard);
     });
 }
+
  
