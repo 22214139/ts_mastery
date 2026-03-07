@@ -95,19 +95,15 @@ const filteredProjects = allProjects.filter(proj => {
         `;
         
        
-        const deleteBtn = projectCard.querySelector('.delete-btn');
-        
-        
-        deleteBtn?.addEventListener('click', () => {
-           
-            allProjects.splice(index, 1);
-            
-           
-            renderProjectsList();
-        });
-        
-        container.appendChild(projectCard);
-    });
-}
+    
+const deleteBtn = projectCard.querySelector('.delete-btn');
 
- 
+deleteBtn?.addEventListener('click', () => {
+   
+    const projectIndex = allProjects.findIndex(p => p.title === proj.title);
+    
+    if (projectIndex !== -1) {
+        allProjects.splice(projectIndex, 1);
+        renderProjectsList(); }
+});
+    })}
