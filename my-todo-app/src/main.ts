@@ -10,6 +10,15 @@ if (app) {
     app.innerHTML = `
     <div class="card">
       <h1>TS Project List 📋</h1>
+      <div class="controls" style="margin-bottom: 20px; display: flex; gap: 10px;">
+    <input type="text" id="search-input" placeholder="Search projects..." style="padding: 8px; flex: 1; border-radius: 5px; border: 1px solid #ccc;">
+    
+    <select id="filter-select" style="padding: 8px; border-radius: 5px;">
+        <option value="all">All</option>
+        <option value="done">Done</option>
+        <option value="in-progress">In Progress</option>
+    </select>
+</div>
       <button id="load-btn" style="background-color: #646cff; color: white; padding: 10px; cursor: pointer; border-radius: 8px; border: none;">
           Fetch New Project 🎲
       </button>
@@ -20,6 +29,13 @@ if (app) {
 
     const loadBtn = document.querySelector('#load-btn');
     loadBtn?.addEventListener('click', fetchRemoteProject);
+    const searchInput = document.querySelector('#search-input');
+const filterSelect = document.querySelector('#filter-select');
+
+
+searchInput?.addEventListener('input', renderProjectsList);
+
+filterSelect?.addEventListener('change', renderProjectsList);
 }
 
 async function fetchRemoteProject() {
@@ -46,11 +62,18 @@ async function fetchRemoteProject() {
 
 function renderProjectsList() {
     const container = document.querySelector('#projects-container');
+    const searchTerm = (document.querySelector('#search-input') as HTMLInputElement)?.value.toLowerCase() || "";
+    const filterValue = (document.querySelector('#filter-select') as HTMLSelectElement)?.value || "all";
     if (!container) return;
 
     container.innerHTML = "";
-
-    allProjects.forEach((proj, index) => {
+const filteredProjects = allProjects.filter(proj => {
+        const matchesSearch = proj.title.toLowerCase().includes(searchTerm);
+        const matchesFilter = filterValue === "all" || proj.status === filterValue;
+        
+        return matchesSearch && matchesFilter; // هر دو شرط باید درست باشن
+    });
+    filteredProjects.forEach((proj, index) => {
         const projectCard = document.createElement('div');
         projectCard.className = "project-card";
         projectCard.style.borderBottom = "1px solid #eee";
